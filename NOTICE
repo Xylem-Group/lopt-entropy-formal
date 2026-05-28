@@ -1,0 +1,12 @@
+lopt-entropy-formal
+Copyright 2026 Xylem Group
+
+This product includes Lean 4 formalizations of NIST SP 800-90B
+estimators initially produced by Harmonic's Aristotle theorem prover
+(https://arxiv.org/abs/2510.01346) under contract to Xylem Group.
+
+This product was developed in support of the lopt entropy provisioning
+service (https://github.com/Xylem-Group/lopt).
+
+This product depends on mathlib4 (https://github.com/leanprover-community/mathlib4),
+which is licensed under the Apache License, Version 2.0.
