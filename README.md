@@ -16,10 +16,19 @@ contribution to mathlib where applicable.
 | §6.3.3 Compression | — | Planned |
 | Composition (min of estimators ⇒ bound) | — | Planned, after the three estimators are individually formalized |
 
+### Mathlib prerequisite work
+
+| Contribution | Lean | Notes |
+|---|---|---|
+| `StieltjesFunction.generalizedInverse` (quantile function) | ✅ Complete, `sorry`-free | `LoptEntropy/Mathlib/StieltjesFunction/Inverse.lean`. Galois-connection-based, with monotonicity, left-continuity, and inversion-on-strict-monotone-range. Intended for upstream contribution to mathlib's `MeasureTheory.Measure.Stieltjes`. Open design questions enumerated in the file footer; Zulip discussion in progress. |
+
 The probabilistic wrapper of MCV currently axiomatizes the normal-
 approximation event because mathlib does not yet provide a packaged
-standard normal CDF Φ and its inverse Φ⁻¹. Discussion of the path
-forward is on Lean Zulip at
+standard normal CDF Φ and its inverse Φ⁻¹. The path forward, per Lean
+Zulip discussion with Etienne Marion, is to define the inverse on the
+general `StieltjesFunction` first (now done — see prerequisite-work
+table above), then instantiate for the Gaussian density to derive Φ⁻¹
+as a corollary. The original Zulip thread is at
 [#mathlib4 → Standard normal CDF Φ — status in mathlib?](https://leanprover.zulipchat.com/#narrow/channel/287929-mathlib4/topic/Standard.20normal.20CDF.20.CE.A6.20.E2.80.94.20status.20in.20.20.20mathlib.3F).
 
 ## Build
