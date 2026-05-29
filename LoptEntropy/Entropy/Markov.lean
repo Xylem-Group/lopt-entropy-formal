@@ -85,7 +85,6 @@ theorem neg_logb_antitone {a b : ℝ}
 /-- Path probability is monotone in the bound parameters: if `πU₁ ≥ πU₂`
 and `PU₁ ≥ PU₂` pointwise, and the smaller bounds are non-negative, then
 `pathProb πU₂ PU₂ path ≤ pathProb πU₁ PU₁ path`. -/
-omit [Fintype A] [Nonempty A] in
 theorem pathProb_mono {d : ℕ}
     (πU₁ πU₂ : A → ℝ) (PU₁ PU₂ : A → A → ℝ)
     (hπ : ∀ a, πU₂ a ≤ πU₁ a)
