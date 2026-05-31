@@ -1,1 +1,6 @@
 /.lake
+
+# internal working notes — not for the public contribution repo
+zulip/
+docs/aristotle_handoff_*.md
+docs/mathlib_pr_readiness_*.md
