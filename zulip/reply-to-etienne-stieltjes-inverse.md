@@ -15,29 +15,35 @@ produced, stay responsive to house style. Post as-is or lightly edit.
 ## Message
 
 Thanks Etienne — that pointer was exactly the right framing, so we took a
-run at it. We prototyped a generalized inverse for a general
-`StieltjesFunction` (the quantile-function construction
-`f.generalizedInverse y = sInf {x | y ≤ f x}`), sorry-free against current
-mathlib, with the four properties that make it usable as a CDF inverse:
+run at it. We built an `EReal`-valued generalized inverse for a general
+`StieltjesFunction ℝ` (the quantile construction
+`f.egInverse y = sInf {x | y ≤ f x}`, valued in `EReal` so it is total),
+sorry-free against current mathlib, with the properties that make it usable
+as a CDF inverse:
 
-- `generalizedInverse_le_iff` — the Galois connection
-  `f.generalizedInverse y ≤ x ↔ y ≤ f x` (the load-bearing one; the rest
-  fall out of it)
-- `generalizedInverse_mono` — monotonicity
-- `generalizedInverse_leftContinuous` — left-continuity (the quantile
-  function is left-continuous, not right; we note this explicitly)
-- `generalizedInverse_apply_self` — inversion when `f` is strictly monotone
+- `egInverse_le_iff` — the Galois connection
+  `f.egInverse y ≤ ↑x ↔ y ≤ f x`, **unconditional** (no `Nonempty`/`BddBelow`);
+  the load-bearing one, the rest fall out of it
+- `egInverse_mono` — monotonicity
+- `egInverse_leftContinuous` — left-continuity (the quantile function is
+  left-continuous, not right; we note this explicitly)
+- `egInverse_apply_self` — inversion when `f` is strictly monotone
+- `egInverse_eq_top_iff` / `egInverse_eq_bot_iff` and a `toReal`
+  specialization — finiteness characterizations so the CDF case lands back
+  on `ℝ`
 
 Before we open a PR we'd rather align on design here, since this is your
 house. A few genuine open questions:
 
-1. **Naming.** We went with `generalizedInverse` (matches the probability
-   literature, avoids collision with `Function.LeftInverse`/`RightInverse`).
-   `quantile` felt too probability-specific for something living next to
-   `StieltjesFunction`. Preference?
+1. **Naming.** Working name `egInverse` (the `e` flags the `EReal`
+   codomain). `generalizedInverse` matches the probability literature and
+   avoids collision with `Function.LeftInverse`/`RightInverse`; `quantile`
+   felt too probability-specific for something sitting next to
+   `StieltjesFunction`. Preference on the name and on how to signal the
+   `EReal` codomain?
 
-2. **Codomain: `ℝ` vs `EReal` — we lean `EReal`, and would value a sanity
-   check.** Our reasoning: over `ℝ` the inverse needs `Nonempty` +
+2. **Codomain: `ℝ` vs `EReal` — we went `EReal`, and would value a sanity
+   check against your conventions.** Our reasoning: over `ℝ` the inverse needs `Nonempty` +
    `BddBelow` guards on every lemma to fence off the `sInf`-junk on the
    empty / unbounded-below level sets, whereas over `EReal` those rows
    become `⊤` / `⊥` (the correct `±∞` quantiles) and the function is total.
@@ -52,9 +58,10 @@ house. A few genuine open questions:
    sit right next to the existing `Stieltjes` / `CDF` API, or is there a
    local convention you'd rather we match?
 
-3. **Hypothesis bundling.** The `Nonempty`/`BddBelow` pair recurs across the
-   lemmas. A bundled predicate would cut boilerplate but might be
-   over-engineering. Your call on whether that's worth it.
+3. **Placement.** Natural home looks like alongside
+   `Mathlib/MeasureTheory/Measure/Stieltjes.lean` — either a new
+   `Stieltjes/Inverse.lean` or a section in the existing file. Where would
+   you want it to sit?
 
 Full transparency on provenance, since I know it matters here: the proof
 was drafted with Harmonic's Aristotle and then human-reviewed line by line
@@ -63,10 +70,12 @@ defend every step" as the bar, not "here's what the prover emitted." Happy
 to share the file (gist or branch) for a read, and to rewrite to whatever
 naming/style you land on before anything goes to a PR.
 
-Scope-wise we'd keep this to just the general inverse. The standard-normal
-Φ / Φ⁻¹ instantiation that started this thread would be a separate,
-later slice once the general construction has a home — no desire to land a
-sprawling stack at once.
+Scope-wise we'd keep this first slice to just the general inverse and its
+basic properties. Two things we've deliberately left as later slices: (a)
+bundling it as a genuine `GaloisConnection` once `f` is extended to
+`EReal → EReal`, and (b) the standard-normal Φ / Φ⁻¹ instantiation that
+started this thread. Both after the general construction has a home — no
+desire to land a sprawling stack at once.
 
 One thing we're realistic about: we're a small group with limited Lean
 seniority, so we'd be staging this over weeks, not rapid-fire. We'd much
@@ -78,7 +87,7 @@ rather get one slice aligned than churn a big PR.
 
 - Reply *in the existing topic*, threaded under Etienne's message.
 - If Etienne (or Rémy Degenne, who owns adjacent CDF work) answers the
-  naming/codomain questions → settle those, update `Inverse.lean`
+  naming/codomain questions → settle those, update `InverseEReal.lean`
   accordingly, *then* open the mathlib PR. Not before.
 - Offer the gist/branch only after someone asks, or attach it if the reply
   invites it — don't front-load a link wall.
