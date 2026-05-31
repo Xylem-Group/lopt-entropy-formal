@@ -5,6 +5,7 @@ Authors: Anand Nambakam
 -/
 import Mathlib.MeasureTheory.Measure.Stieltjes
 import Mathlib.Order.CompleteLatticeIntervals
+import Mathlib.Topology.Order.Basic
 
 /-!
 # EReal-valued generalized inverse of a Stieltjes function
@@ -27,6 +28,7 @@ valued in `EReal` so that it is **total and hypothesis-free**: no `Nonempty` or
 * `egInverse_eq_top_iff`: `f.egInverse y = ⊤ ↔ {x | y ≤ f x} = ∅`.
 * `egInverse_eq_bot_iff`: `f.egInverse y = ⊥ ↔ ¬BddBelow {x | y ≤ f x}`.
 * `egInverse_apply_self`: for strictly monotone `f`, `f.egInverse (f x) = ↑x`.
+* `egInverse_leftContinuous`: left-continuity of the quantile function.
 * Real-valued specialization lemmas for `toReal` round-trips.
 
 ## Implementation notes
@@ -174,6 +176,27 @@ theorem le_apply_egInverse_toReal (f : StieltjesFunction ℝ) {y : ℝ}
   have h := egInverse_toReal f htop hbot
   exact (egInverse_le_iff f).mp (h ▸ le_refl _)
 
+/-! ### Left-continuity -/
+
+/-- The generalized inverse is **left-continuous**: as a function `ℝ → EReal` it is
+continuous within `Set.Iic y` at every point `y`. This is the classical left-continuity
+of a quantile function, here unconditional thanks to the `EReal` codomain. -/
+theorem egInverse_leftContinuous (f : StieltjesFunction ℝ) (y : ℝ) :
+    ContinuousWithinAt f.egInverse (Set.Iic y) y := by
+  apply tendsto_order.2 ⟨?_, ?_⟩
+  · intro a' ha'
+    obtain ⟨r, hr⟩ : ∃ r : ℝ, a' < r ∧ r < f.egInverse y := EReal.exists_between_coe_real ha'
+    have h_fr_lt_y : f r < y := by
+      contrapose! hr
+      exact fun _ => (egInverse_le_iff f).2 hr
+    rw [eventually_nhdsWithin_iff]
+    filter_upwards [lt_mem_nhds h_fr_lt_y] with x hx₁ hx₂ using
+      lt_of_lt_of_le hr.1 (le_of_not_gt fun hx₃ => by
+        linarith [(egInverse_le_iff f).1 hx₃.le])
+  · intro a ha
+    filter_upwards [self_mem_nhdsWithin] with b hb
+    exact lt_of_le_of_lt (f.egInverse_mono hb) ha
+
 end StieltjesFunction
 
 end
@@ -188,9 +211,4 @@ end
 2. **Galois connection**: once `f` is extended to `EReal → EReal` (sending `⊥ ↦ ⊥`
    and `⊤ ↦ ⊤`), the pair `(egInverse f, f_extended)` should form a
    `GaloisConnection`. This is a natural follow-up.
-
-3. **Left-continuity**: the generalized inverse of a right-continuous monotone
-   function is classically left-continuous. Formalizing this for `egInverse` in
-   the `EReal` order topology requires working with `EReal`-valued filters and
-   neighborhoods; this is deferred to a follow-up.
 -/
