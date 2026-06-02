@@ -73,8 +73,8 @@ theorem stdNormalQuantile_ne_top {p : ℝ} (_hp0 : 0 < p) (hp1 : p < 1) :
     convert stdNormalCDF_tendsto_atTop using 1
   have h_exists_x : ∃ x : ℝ, p < stdNormalCDF x :=
     (h_tendsto.eventually (lt_mem_nhds hp1)).exists
-  exact Set.Nonempty.ne_empty
-    ⟨Classical.choose h_exists_x, le_of_lt (Classical.choose_spec h_exists_x)⟩
+  obtain ⟨x, hx⟩ := h_exists_x
+  exact ⟨x, le_of_lt hx⟩
 
 /-- For `p ∈ (0, 1)`, the quantile Φ⁻¹(p) is not `⊥`.
   By `egInverse_ne_bot_iff`, it suffices to show `BddBelow {x | p ≤ Φ(x)}`.
