@@ -1,27 +1,36 @@
 # CODEOWNERS for lopt-entropy-formal
 #
-# Default reviewer: wock9000 (Xylem Group maintainer line).
-# A CODEOWNERS file tells GitHub which user(s) to automatically request as
-# reviewers when a PR touches matching files. With branch protection
-# requiring CODEOWNERS review, this ensures no merge happens without the
-# named owner approving.
+# Default reviewer: the @Xylem-Group/engineering team (the org maintainer
+# line). A CODEOWNERS file tells GitHub which team/user(s) to automatically
+# request as reviewers when a PR touches matching files. With branch
+# protection requiring CODEOWNERS review, this ensures no merge happens
+# without an owner approving.
+#
+# ⚠️ ACCESS REQUIRED — the @Xylem-Group/engineering team exists (id 18136162)
+# but currently has NO push access to this repo (repos_count=0). GitHub only
+# honors a CODEOWNERS team entry when that team has explicit repository
+# access; until access is granted these owner lines are INVALID and silently
+# ignored, which disables the "require code owner reviews" branch-protection
+# control. The org operator must grant the engineering team push (or
+# maintain) access to this repo to make this CODEOWNERS effective. Until
+# then @wock9000 (org admin) remains the effective fallback reviewer.
 #
 # Format: <path-glob> <space> <owner1> [<owner2>...]
 # More specific patterns override earlier ones.
 # Documentation: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-security/customizing-your-repository/about-code-owners
 
 # Default owner for every file in the repo.
-* @wock9000
+* @Xylem-Group/engineering
 
 # Lean source — same owner; called out explicitly so changes here
 # always show "owned by" in the GitHub review UI even if patterns
 # above are later relaxed.
-/LoptEntropy/ @wock9000
+/LoptEntropy/ @Xylem-Group/engineering
 
 # CI workflows — extra scrutiny on changes that affect what passes/fails.
-/.github/workflows/ @wock9000
+/.github/workflows/ @Xylem-Group/engineering
 
 # License + attribution files — should not change without deliberate
 # review of the legal posture.
-/LICENSE @wock9000
-/NOTICE @wock9000
+/LICENSE @Xylem-Group/engineering
+/NOTICE @Xylem-Group/engineering
