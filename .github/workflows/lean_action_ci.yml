@@ -11,4 +11,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v5
-      - uses: leanprover/lean-action@v1
+      - uses: leanprover/lean-action@38fbc41a8c28c4cbaec22d7f7de508ec2e7c0dd9  # v1 (2026-06-30)
+      - name: axiom gate (sorryAx + native_decide + unauthorized axiom quarantine)
+        run: bash scripts/gate/run-axiom-gate.sh
