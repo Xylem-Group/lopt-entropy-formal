@@ -1,0 +1,22 @@
+name: PR Review (AI)
+
+# Thin shim -- delegates to the org-wide reusable workflow at
+# Xylem-Group/.github/.github/workflows/pr-review.yml@trunk.
+#
+# That reusable workflow runs anthropics/claude-code-action (SHA-pinned,
+# first-party, JavaScript Action) on GitHub-hosted runners and files the
+# claude-review verdict as a native review + commit status. Centralizing
+# in .github means action-version bumps happen once and propagate to every
+# consumer repo. No explicit permissions block: the caller inherits the
+# reusable workflow's declared job-level permissions, which avoids the
+# under-declaration startup_failure trap of a hand-maintained caller block.
+
+on:
+  pull_request:
+    types: [opened, reopened, ready_for_review]
+  issue_comment:
+
+jobs:
+  review:
+    uses: Xylem-Group/.github/.github/workflows/pr-review.yml@trunk
+    secrets: inherit
