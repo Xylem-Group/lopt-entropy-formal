@@ -13,7 +13,15 @@ name: PR Review (AI)
 
 on:
   pull_request:
-    types: [opened, reopened, ready_for_review]
+    types: [opened, reopened, ready_for_review, synchronize]
+    # `synchronize` is REQUIRED for the stall-breaker in the reusable
+    # workflow's `review-gate` job. Without this event being delivered at
+    # all, a PR that Claude marked CHANGES_REQUESTED and whose author then
+    # pushes a fix gets no re-review, no `claude-review` status on the new
+    # head SHA, and no re-trigger -- it stalls permanently. `review-gate`
+    # re-reviews ONLY when the latest decisive verdict is CHANGES_REQUESTED,
+    # so normal multi-commit PRs still get exactly one review and the
+    # workflow's deliberate API-cost decision is preserved.
   issue_comment:
 
 jobs:
