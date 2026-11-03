@@ -95,7 +95,7 @@ theorem pathProb_mono {d : ℕ}
     pathProb πU₂ PU₂ path ≤ pathProb πU₁ PU₁ path := by
   unfold pathProb
   apply mul_le_mul (hπ _)
-  · exact Finset.prod_le_prod (fun _ _ => hP_nn _ _) fun _ _ => hP _ _
+  · exact Finset.prod_le_prod₀ (fun _ _ => hP_nn _ _) fun _ _ => hP _ _
   · exact Finset.prod_nonneg fun _ _ => hP_nn _ _
   · exact le_trans (hπ_nn _) (hπ _)
 
